@@ -86,3 +86,62 @@ order by id_em;
 
 -- alter table employee
 --  drop constraint FK_employee_id_departament;
+
+-- sql2: Utilizando la misma base de datos. Parte 2
+-- Crea una tabla llamada "employee_hobby" con los campos "id", "name", "description". 
+
+create table employee_hobby(
+  id_h serial,
+  name_h varchar(30) not null,
+  description_h varchar(100) not null,
+  primary key (id_h)
+ );
+
+-- Haz los cambios necesarios en la base de datos para poder asignar a los empleados sus pasatiempos.
+
+create table emplo_hobby(
+  id_em_ho serial,
+  id_emp  smallint references employee(id_em),
+  id_hobby smallint references employee_hobby(id_h)
+)
+
+-- Inserta 3 pasatiempos y asígnale a todos los empleados al menos 2 pasatiempos. 
+insert into employee_hobby(name_h,description_h)
+values('Leer','Lecturas acerca de.........');
+insert into employee_hobby(name_h,description_h)
+values('Nadar','Ayuda a reelajarse despues de un dia intenso');
+insert into employee_hobby(name_h,description_h)
+values('Dibujar','Ayuda a liberar la imaginacion');
+
+-- Se asigna a los empleados los diferentes hobbys
+insert into emplo_hobby(id_emp,id_hobby)
+values ('1','1');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('1','2');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('2','1');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('2','3');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('3','2');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('3','3');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('4','3');
+insert into emplo_hobby(id_emp,id_hobby)
+values ('4','2');
+
+select * from emplo_hobby
+-- Reglas: 
+-- Un empleado puede tener muchos pasatiempos. Y muchos pasatiempos pueden pertenecer a muchos empleados. 
+-- Haz cumplir las reglas de normalización de tablas y reglas de base de datos
+
+
+select e.first_name, emh.name_h
+from employee as e
+join emplo_hobby as eh
+  on e.id_em=eh.id_emp
+  join employee_hobby as emh 
+  on emh.id_h=eh.id_hobby
+  order by id_em ;
+  
