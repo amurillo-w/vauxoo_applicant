@@ -145,3 +145,44 @@ join emplo_hobby as eh
   on emh.id_h=eh.id_hobby
   order by id_em ;
   
+
+--sql3: Haz los cambios necesarios en la base de datos para poder 
+--asignar a los empleados un jefe.
+--Inserta a cada empleado un jefe. 
+--Reglas: 
+--Un jefe, es también un empleado. 
+--Un empleado solo puede tener un jefe. --
+--Y un jefe puede tener muchos empleados. 
+--Haz cumplir las reglas de normalización de tablas y reglas de base de datos.
+
+--Agregar campo jefe a la tabla employee
+
+alter table employee
+  add jefe smallint;
+
+-- Se grega una restriccion FK dentro de la misma tabla
+ alter table employee
+  add constraint FK_employee_jefe
+  foreign key (jefe)
+  references employee (id_em);
+
+--Se agrega una restriccion check
+alter table employee
+ add constraint CK_id_dif_jefe
+ check (id_em<>jefe) 
+
+ --Se agrega jefes a los empleados
+ update employee set jefe='3'
+  where id_em='1';
+
+   update employee set jefe='3'
+  where id_em='2';
+
+   update employee set jefe='1'
+  where id_em='3';
+
+   update employee set jefe='1'
+  where id_em='4';
+  
+  select * from employee
+
